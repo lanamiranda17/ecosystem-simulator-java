@@ -8,38 +8,63 @@ public abstract class Animal {
     private Field field;
     private Location location;
 
-    abstract public void act(List<Animal> newAnimals);
-    abstract protected int getBreedingAge();
-    abstract protected int getMaxAge();
+    // --- Contrato polimórfico ---
+    public abstract void act(List<Animal> newAnimals);
+    protected abstract int getBreedingAge();
+    protected abstract int getMaxAge();
 
-    public boolean canBreed(){
-        return age>= getBreedingAge();
-    }
-    public boolean isAlive(){
-        return alive;
-    }
-    public Animal(boolean randomAge,Field field , Location location){
-        age = 0;
-        alive = true;
+    // --- Construtor comum ---
+    public Animal(boolean randomAge, Field field, Location location) {
+        this.age = 0;
+        this.alive = true;
         this.field = field;
-        this.location = location;
-        if(randomAge) {
-            age = rand.nextInt(getMaxAge());
+        setLocation(location); // usa o setter para já posicionar no field
+        if (randomAge) {
+            this.age = rand.nextInt(getMaxAge()); // 0 .. maxAge-1
         }
     }
-    public void setDead(){
+
+    // --- Utilidades comuns ---
+    protected boolean canBreed() {
+        return age >= getBreedingAge();
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    protected void setDead() {
         alive = false;
-        if(location != null){
-            field.clear();
+        if (location != null && field != null) {
+            field.clear(location);
             location = null;
             field = null;
         }
     }
-    private void incrementAge()
-    {
+
+    protected void incrementAge() {
         age++;
-        if(age > getMaxAge()) {
+        if (age > getMaxAge()) {
             setDead();
+        }
+    }
+
+    // --- Acesso controlado ao ambiente ---
+    protected Field getField() {
+        return field;
+    }
+
+    protected Location getLocation() {
+        return location;
+    }
+
+    protected void setLocation(Location newLocation) {
+        if (this.location != null && field != null) {
+            field.clear(this.location);
+        }
+        this.location = newLocation;
+        if (field != null && newLocation != null) {
+            field.place(this, newLocation);
         }
     }
 }
