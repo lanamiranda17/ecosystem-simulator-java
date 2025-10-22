@@ -5,11 +5,9 @@ import java.util.Random;
 import java.awt.Color;
 
 public class Simulator {
-    // Tamanho padrão do campo
     private static final int DEFAULT_DEPTH = 50;
     private static final int DEFAULT_WIDTH = 50;
 
-    // Probabilidades de criação
     private static final double FOX_CREATION_PROBABILITY = 0.02;
     private static final double RABBIT_CREATION_PROBABILITY = 0.08;
 
@@ -46,7 +44,6 @@ public class Simulator {
         step++;
         List<Animal> newAnimals = new ArrayList<>();
 
-        // POLIMORFISMO: cada espécie executa seu próprio act()
         for (Iterator<Animal> it = animals.iterator(); it.hasNext();) {
             Animal animal = it.next();
             animal.act(newAnimals);
@@ -76,7 +73,6 @@ public class Simulator {
                 } else if (r <= FOX_CREATION_PROBABILITY + RABBIT_CREATION_PROBABILITY) {
                     animals.add(new Rabbit(true, field, location));
                 }
-                // senão, deixa vazio
             }
         }
     }

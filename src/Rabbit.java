@@ -17,16 +17,13 @@ public class Rabbit extends Animal {
         incrementAge();
         if (!isAlive()) return;
 
-        // nascimento
         giveBirth(newAnimals);
 
-        // movimentação
         Field field = getField();
         Location next = field.freeAdjacentLocation(getLocation());
         if (next != null) {
             setLocation(next);
         } else {
-            // superlotação
             setDead();
         }
     }

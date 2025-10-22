@@ -8,23 +8,20 @@ public abstract class Animal {
     private Field field;
     private Location location;
 
-    // --- Contrato polimórfico ---
     public abstract void act(List<Animal> newAnimals);
     protected abstract int getBreedingAge();
     protected abstract int getMaxAge();
 
-    // --- Construtor comum ---
     public Animal(boolean randomAge, Field field, Location location) {
         this.age = 0;
         this.alive = true;
         this.field = field;
-        setLocation(location); // usa o setter para já posicionar no field
+        setLocation(location); 
         if (randomAge) {
-            this.age = rand.nextInt(getMaxAge()); // 0 .. maxAge-1
+            this.age = rand.nextInt(getMaxAge()); 
         }
     }
 
-    // --- Utilidades comuns ---
     protected boolean canBreed() {
         return age >= getBreedingAge();
     }
@@ -49,7 +46,6 @@ public abstract class Animal {
         }
     }
 
-    // --- Acesso controlado ao ambiente ---
     protected Field getField() {
         return field;
     }

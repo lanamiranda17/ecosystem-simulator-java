@@ -14,10 +14,8 @@ public class Fox extends Animal {
 
     public Fox(boolean randomAge, Field field, Location location) {
         super(randomAge, field, location);
-        // raposa recém-nascida começa alimentada
         foodLevel = RABBIT_FOOD_VALUE;
         if (randomAge) {
-            // fome aleatória também, semelhante ao livro
             foodLevel = rand.nextInt(RABBIT_FOOD_VALUE) + 1;
         }
     }
@@ -28,10 +26,8 @@ public class Fox extends Animal {
         incrementHunger();
         if (!isAlive()) return;
 
-        // nascimento
         giveBirth(newAnimals);
 
-        // caça e movimento
         Location newLocation = findFood();
         if (newLocation == null) {
             newLocation = getField().freeAdjacentLocation(getLocation());
@@ -39,7 +35,7 @@ public class Fox extends Animal {
         if (newLocation != null) {
             setLocation(newLocation);
         } else {
-            setDead(); // superlotação
+            setDead(); 
         }
     }
 
@@ -57,8 +53,8 @@ public class Fox extends Animal {
             if (obj instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) obj;
                 if (rabbit.isAlive()) {
-                    rabbit.setDead();               // come o coelho
-                    foodLevel = RABBIT_FOOD_VALUE;  // recarrega “energia”
+                    rabbit.setDead();               
+                    foodLevel = RABBIT_FOOD_VALUE; 
                     return where;
                 }
             }
