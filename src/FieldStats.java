@@ -2,11 +2,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FieldStats {
-    private HashMap counters;
+    private HashMap<Class, Counter> counters;
     private boolean countsValid;
 
     public FieldStats() {
-        counters = new HashMap();
+        counters = new HashMap<Class, Counter>();
         countsValid = true;
     }
 
@@ -15,9 +15,10 @@ public class FieldStats {
         if (!countsValid) {
             generateCounts(field);
         }
-        Iterator keys = counters.keySet().iterator();
+        
+        Iterator<Class> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
-            Counter info = (Counter) counters.get(keys.next());
+            Counter info = counters.get(keys.next());
             buffer.append(info.getName());
             buffer.append(": ");
             buffer.append(info.getCount());
@@ -28,18 +29,18 @@ public class FieldStats {
 
     public void reset() {
         countsValid = false;
-        Iterator keys = counters.keySet().iterator();
+        Iterator<Class> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
-            Counter counter = (Counter) counters.get(keys.next());
+            Counter counter = counters.get(keys.next());
             counter.reset();
         }
     }
 
-    public void incrementCount(Class animalClass) {
-        Counter counter = (Counter) counters.get(animalClass);
+    public void incrementCount(Class aClass) {
+        Counter counter = counters.get(aClass);
         if (counter == null) {
-            counter = new Counter(animalClass.getName());
-            counters.put(animalClass, counter);
+            counter = new Counter(aClass.getName());
+            counters.put(aClass, counter);
         }
         counter.increment();
     }
@@ -53,9 +54,10 @@ public class FieldStats {
         if (!countsValid) {
             generateCounts(field);
         }
-        Iterator keys = counters.keySet().iterator();
+        
+        Iterator<Class> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
-            Counter info = (Counter) counters.get(keys.next());
+            Counter info = counters.get(keys.next());
             if (info.getCount() > 0) {
                 nonZero++;
             }

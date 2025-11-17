@@ -3,11 +3,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
 
-
-public class SimulatorView extends JFrame
-{
+public class SimulatorView extends JFrame {
     private static final Color EMPTY_COLOR = Color.white;
-
     private static final Color UNKNOWN_COLOR = Color.gray;
 
     private final String STEP_PREFIX = "Step: ";
@@ -15,13 +12,12 @@ public class SimulatorView extends JFrame
     private JLabel stepLabel, population;
     private FieldView fieldView;
     
-    private HashMap colors;
+    private HashMap<Class, Color> colors;
     private FieldStats stats;
 
-    public SimulatorView(int height, int width)
-    {
+    public SimulatorView(int height, int width) {
         stats = new FieldStats();
-        colors = new HashMap();
+        colors = new HashMap<Class, Color>();
 
         setTitle("Fox and Rabbit Simulation");
         stepLabel = new JLabel(STEP_PREFIX, JLabel.CENTER);
@@ -39,14 +35,12 @@ public class SimulatorView extends JFrame
         setVisible(true);
     }
     
-    public void setColor(Class animalClass, Color color)
-    {
+    public void setColor(Class<?> animalClass, Color color) {
         colors.put(animalClass, color);
     }
 
-    private Color getColor(Class animalClass)
-    {
-        Color col = (Color)colors.get(animalClass);
+    private Color getColor(Class<?> animalClass) {
+        Color col = colors.get(animalClass);
         if(col == null) {
             return UNKNOWN_COLOR;
         }
@@ -55,8 +49,7 @@ public class SimulatorView extends JFrame
         }
     }
 
-    public void showStatus(int step, Field field)
-    {
+    public void showStatus(int step, Field field) {
         if(!isVisible())
             setVisible(true);
 
@@ -83,14 +76,12 @@ public class SimulatorView extends JFrame
         fieldView.repaint();
     }
 
-    public boolean isViable(Field field)
-    {
+    public boolean isViable(Field field) {
         return stats.isViable(field);
     }
     
 
-    private class FieldView extends JPanel
-    {
+    private class FieldView extends JPanel {
         private final int GRID_VIEW_SCALING_FACTOR = 6;
 
         private int gridWidth, gridHeight;
@@ -99,22 +90,19 @@ public class SimulatorView extends JFrame
         private Graphics g;
         private Image fieldImage;
 
-        public FieldView(int height, int width)
-        {
+        public FieldView(int height, int width) {
             gridHeight = height;
             gridWidth = width;
             size = new Dimension(0, 0);
         }
 
-        public Dimension getPreferredSize()
-        {
+        public Dimension getPreferredSize() {
             return new Dimension(gridWidth * GRID_VIEW_SCALING_FACTOR,
                                  gridHeight * GRID_VIEW_SCALING_FACTOR);
         }
         
-        public void preparePaint()
-        {
-            if(! size.equals(getSize())) {  
+        public void preparePaint() {
+            if(! size.equals(getSize())) {
                 size = getSize();
                 fieldImage = fieldView.createImage(size.width, size.height);
                 g = fieldImage.getGraphics();
@@ -130,14 +118,12 @@ public class SimulatorView extends JFrame
             }
         }
 
-        public void drawMark(int x, int y, Color color)
-        {
+        public void drawMark(int x, int y, Color color) {
             g.setColor(color);
             g.fillRect(x * xScale, y * yScale, xScale-1, yScale-1);
         }
 
-        public void paintComponent(Graphics g)
-        {
+        public void paintComponent(Graphics g) {
             if(fieldImage != null) {
                 g.drawImage(fieldImage, 0, 0, null);
             }

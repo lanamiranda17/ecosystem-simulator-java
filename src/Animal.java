@@ -7,15 +7,18 @@ public abstract class Animal {
     private static final Random rand = new Random();
     private Field field;
     private Location location;
+    private Object terrenoEmbaixo;
 
-    public abstract void act(List<Animal> newAnimals);
+   public abstract void act(List<Animal> newAnimals, Clima clima);
     protected abstract int getBreedingAge();
     protected abstract int getMaxAge();
+    protected abstract boolean podeMover(Location loc);
 
     public Animal(boolean randomAge, Field field, Location location) {
         this.age = 0;
         this.alive = true;
         this.field = field;
+        this.terrenoEmbaixo = null;
         setLocation(location); 
         if (randomAge) {
             this.age = rand.nextInt(getMaxAge()); 
@@ -33,7 +36,11 @@ public abstract class Animal {
     protected void setDead() {
         alive = false;
         if (location != null && field != null) {
-            field.clear(location);
+            if (terrenoEmbaixo != null) {
+                field.place(terrenoEmbaixo, location);
+            } else {
+                field.clear(location);
+            }
             location = null;
             field = null;
         }
@@ -55,11 +62,25 @@ public abstract class Animal {
     }
 
     protected void setLocation(Location newLocation) {
-        if (this.location != null && field != null) {
-            field.clear(this.location);
+        if (location != null && field != null) {
+            if (terrenoEmbaixo != null) {
+                field.place(terrenoEmbaixo, location);
+            } else {
+                field.clear(location);
+            }
         }
+
         this.location = newLocation;
+        
         if (field != null && newLocation != null) {
+            Object objAtNewLocation = field.getObjectAt(newLocation);
+            
+            if (objAtNewLocation instanceof Lago || objAtNewLocation instanceof Montanha) {
+                this.terrenoEmbaixo = objAtNewLocation;
+            } else {
+                this.terrenoEmbaixo = null; 
+            }
+            
             field.place(this, newLocation);
         }
     }
