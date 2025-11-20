@@ -1,6 +1,10 @@
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Mantém estatísticas sobre a população do campo,
+ * como a contagem de cada tipo de objeto.
+ */
 public class FieldStats {
     private HashMap<Class, Counter> counters;
     private boolean countsValid;

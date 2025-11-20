@@ -2,6 +2,10 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Representa uma raposa na simulação.
+ * Raposas caçam coelhos para se alimentar, podem se reproduzir e morrer de fome ou velhice.
+ */
 public class Fox extends Animal {
     private static final int BREEDING_AGE = 10;
     private static final int MAX_AGE = 150;
@@ -73,6 +77,11 @@ public class Fox extends Animal {
         }
     }
 
+    /**
+     * Tenta encontrar comida (coelhos) nas posições adjacentes.
+     *
+     * @return localização de um coelho para ser caçado ou null se nada for encontrado
+     */
     private Location findFood() {
         Field field = getField();
         Iterator<Location> it = field.adjacentLocations(getLocation());
@@ -104,6 +113,13 @@ public class Fox extends Animal {
         }
     }
 
+    /**
+     * Calcula o número de filhotes gerados nesta reprodução,
+     * considerando a probabilidade definida e o clima.
+     *
+     * @param clima clima atual da simulação
+     * @return quantidade de novos filhotes gerados
+     */
     private int breed(Clima clima) {
         if (canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
             return rand.nextInt(MAX_LITTER_SIZE) + 1;

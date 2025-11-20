@@ -7,6 +7,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Controla a execução da simulação:
+ * inicializa o campo, popula com entidades, avança passos e atualiza o clima.
+ */
 public class Simulator {
     private static final int DEFAULT_DEPTH = 50;
     private static final int DEFAULT_WIDTH = 50;
@@ -46,14 +50,29 @@ public class Simulator {
         reset();
     }
 
+    /**
+     * Executa uma simulação longa com um número fixo de passos.
+     * Usa um valor padrão predefinido.
+     */
     public void runLongSimulation() { simulate(500); }
 
+    /**
+     * Executa a simulação pelo número de passos informado,
+     * interrompendo caso o campo deixe de ser viável.
+     *
+     * @param numSteps quantidade máxima de passos a executar
+     */
     public void simulate(int numSteps) {
         for (int i = 1; i <= numSteps && view.isViable(field); i++) {
             simulateOneStep();
         }
     }
 
+    /**
+     * Executa um único passo da simulação:
+     * avança o contador de passos, atualiza o clima, faz todos os animais agirem
+     * e atualiza a visualização.
+     */
     public void simulateOneStep() {
         step++;
         
@@ -94,7 +113,8 @@ public class Simulator {
     
     private void populate() {
         field.clear();
-        
+        System.out.println("Diretório atual: " + System.getProperty("user.dir"));
+
         try (BufferedReader reader = new BufferedReader(new FileReader("mapa.txt"))) {
             String line;
             int row = 0;

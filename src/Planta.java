@@ -1,3 +1,7 @@
+/**
+ * Representa uma planta no campo,
+ * que pode ser consumida por coelhos como fonte de alimento.
+ */
 public class Planta {
 
     private boolean alive;   

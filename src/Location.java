@@ -1,9 +1,17 @@
-
+/**
+ * Representa uma posição no campo, definida por linha e coluna.
+ */
 public class Location
 {
     private int row;
     private int col;
 
+    /**
+     * Cria uma nova localização.
+     *
+     * @param row linha da posição
+     * @param col coluna da posição
+     */
     public Location(int row, int col)
     {
         this.row = row;

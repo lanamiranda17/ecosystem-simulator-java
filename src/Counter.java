@@ -1,4 +1,6 @@
-
+/**
+ * Contador simples usado para rastrear a quantidade de instâncias de um tipo.
+ */
 public class Counter {
     private String name;
     private int count;

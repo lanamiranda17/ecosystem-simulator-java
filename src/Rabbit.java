@@ -2,6 +2,10 @@ import java.util.List;
 import java.util.Iterator; 
 import java.util.Random;
 
+/**
+ * Representa um coelho no campo.
+ * Move-se, alimenta-se de plantas, reproduz e pode morrer de fome ou velhice.
+ */
 public class Rabbit extends Animal {
     private static final int BREEDING_AGE = 5;
     private static final int MAX_AGE = 40;
@@ -67,6 +71,11 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * Tenta encontrar comida (plantas) nas posições adjacentes.
+     *
+     * @return localização contendo alimento ou null se não houver comida disponível
+     */
     private Location findFood() {
         Field field = getField();
         Iterator<Location> it = field.adjacentLocations(getLocation());
@@ -97,6 +106,13 @@ public class Rabbit extends Animal {
         }
     }
 
+    /**
+     * Calcula o número de filhotes gerados nesta reprodução,
+     * considerando a probabilidade definida e o clima.
+     *
+     * @param clima clima atual da simulação
+     * @return quantidade de novos filhotes gerados
+     */
     private int breed(Clima clima) {
         double chance = BREEDING_PROBABILITY;
         

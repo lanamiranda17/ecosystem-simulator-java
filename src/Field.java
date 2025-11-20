@@ -3,12 +3,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 
-
+/**
+ * Representa o campo em forma de grade onde animais, plantas e obstáculos são posicionados.
+ */
 public class Field {
     private Object[][] field;
     private int depth;
     private int width;
 
+    /**
+     * Cria um novo campo retangular.
+     *
+     * @param depth número de linhas do campo
+     * @param width número de colunas do campo
+     */
     public Field(int depth, int width) {
         this.depth = depth;
         this.width = width;
@@ -31,6 +39,12 @@ public class Field {
         field[row][col] = obj;
     }
 
+    /**
+     * Posiciona um objeto em uma determinada localização do campo.
+     *
+     * @param obj objeto a ser colocado
+     * @param location posição onde o objeto será inserido
+     */
     public void place(Object obj, Location location) {
         field[location.getRow()][location.getCol()] = obj;
     }

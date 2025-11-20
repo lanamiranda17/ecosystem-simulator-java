@@ -1,6 +1,10 @@
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Classe base para todos os animais da simulação.
+ * Controla idade, estado de vida, posição no campo e acesso ao terreno.
+ */
 public abstract class Animal {
     private int age;
     private boolean alive;
@@ -9,11 +13,38 @@ public abstract class Animal {
     private Location location;
     private Object terrenoEmbaixo;
 
-   public abstract void act(List<Animal> newAnimals, Clima clima);
+    /**
+     * Executa um passo da simulação para este animal.
+     * A implementação concreta define o comportamento (mover, comer, reproduzir, etc.).
+     *
+     * @param newAnimals lista onde novos animais gerados neste passo devem ser adicionados
+     * @param clima clima atual da simulação
+     */
+    public abstract void act(List<Animal> newAnimals, Clima clima);
+    
+    /**
+     * Retorna a idade mínima para que o animal possa se reproduzir.
+     *
+     * @return idade mínima de reprodução
+     */
     protected abstract int getBreedingAge();
+    
+    /**
+     * Retorna a idade máxima que o animal pode atingir antes de morrer de velhice.
+     *
+     * @return idade máxima
+     */
     protected abstract int getMaxAge();
+  
     protected abstract boolean podeMover(Location loc);
-
+    
+    /**
+     * Cria um novo animal em uma posição do campo.
+     *
+     * @param randomAge se true, inicia o animal com idade aleatória
+     * @param field campo em que o animal será inserido
+     * @param location localização inicial do animal no campo
+     */
     public Animal(boolean randomAge, Field field, Location location) {
         this.age = 0;
         this.alive = true;

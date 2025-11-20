@@ -3,6 +3,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
 
+/**
+ * Interface gráfica da simulação.
+ * Exibe o campo, o passo atual e as estatísticas de população.
+ */
 public class SimulatorView extends JFrame {
     private static final Color EMPTY_COLOR = Color.white;
     private static final Color UNKNOWN_COLOR = Color.gray;

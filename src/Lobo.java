@@ -2,6 +2,10 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Representa um lobo na simulação.
+ * Lobo atua como grande predador, podendo caçar coelhos e raposas.
+ */
 public class Lobo extends Animal {
 
     private static final int BREEDING_AGE = 15;
@@ -75,6 +79,15 @@ public class Lobo extends Animal {
         }
     }
 
+    /**
+     * Procura alimento nas posições adjacentes ao lobo.
+     * O lobo pode comer raposas e coelhos. Ao encontrar uma presa viva,
+     * ela é abatida, o nível de comida do lobo é restaurado conforme o tipo da presa,
+     * e a localização onde a presa foi encontrada é retornada.
+     *
+     * @return a localização onde a presa foi encontrada; 
+     *         ou null se nenhuma presa estiver disponível nas redondezas
+     */
     private Location findFood() {
         Field field = getField();
         Iterator<Location> it = field.adjacentLocations(getLocation());
@@ -117,6 +130,13 @@ public class Lobo extends Animal {
         }
     }
 
+    /**
+     * Calcula o número de filhotes gerados nesta reprodução,
+     * considerando a probabilidade definida e o clima.
+     *
+     * @param clima clima atual da simulação
+     * @return quantidade de novos filhotes gerados
+     */
     private int breed(Clima clima) {
         if (canBreed() && RAND.nextDouble() <= BREEDING_PROBABILITY) {
             return RAND.nextInt(MAX_LITTER_SIZE) + 1;
