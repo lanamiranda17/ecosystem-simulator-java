@@ -22,7 +22,6 @@ public class Simulator {
 
     private static final double FOX_CREATION_PROBABILITY = 0.03;
     private static final double RABBIT_CREATION_PROBABILITY = 0.10;
-    private static final double PLANT_CREATION_PROBABILITY = 0.20;
     private static final double LOBO_CREATION_PROBABILITY = 0.01;
 
     /** Probabilidades usadas quando o mapa.txt não é encontrado. */
@@ -81,6 +80,7 @@ public class Simulator {
      * @param numSteps quantidade de passos a simular
      */
     public void simulate(int numSteps) {
+        spawnPlants(0.05);
         for (int i = 1; i <= numSteps && view.isViable(field); i++) {
             simulateOneStep();
         }
@@ -102,7 +102,6 @@ public class Simulator {
             avancarClima();
         }
 
-        spawnPlants();
         List<Animal> newAnimals = new ArrayList<>();
 
         for (Iterator<Animal> it = animals.iterator(); it.hasNext();) {
@@ -227,33 +226,50 @@ public class Simulator {
 
     /**
      * Gera novas plantas aleatórias em células vazias.
-     * Executado a cada passo da simulação.
+     * Executado inicialemnte e depois a cada troca de estação.
+     * Cada estação tem sua probabilidade de nascimento de plantas.
      */
-    private void spawnPlants() {
+    private void spawnPlants(double prob) {
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
+                Location loc = new Location(row, col);
 
-                Location location = new Location(row, col);
-
-                if (field.getObjectAt(location) == null) {
-                    if (rand.nextDouble() <= PLANT_CREATION_PROBABILITY) {
-                        Planta planta = new Planta(field, location);
-                        field.place(planta, location);
+                if (field.getObjectAt(loc) == null) {
+                    if (rand.nextDouble() <= prob) {
+                        field.place(new Planta(field, loc), loc);
                     }
                 }
             }
         }
     }
 
+
     /**
      * Alterna a estação do ano conforme o número de passos definidos.
      */
     private void avancarClima() {
-        switch (climaAtual) {
-            case PRIMAVERA: climaAtual = Clima.VERAO; break;
-            case VERAO:     climaAtual = Clima.OUTONO; break;
-            case OUTONO:    climaAtual = Clima.INVERNO; break;
-            case INVERNO:   climaAtual = Clima.PRIMAVERA; break;
-        }
+
+    switch (climaAtual) {
+        case PRIMAVERA:
+            climaAtual = Clima.VERAO;
+            spawnPlants(0.40); // muitas plantas
+            break;
+
+        case VERAO:
+            climaAtual = Clima.OUTONO;
+            spawnPlants(0.25); 
+            break;
+
+        case OUTONO:
+            climaAtual = Clima.INVERNO;
+            spawnPlants(0.1); // quase nada
+            break;
+
+        case INVERNO:
+            climaAtual = Clima.PRIMAVERA;
+            spawnPlants(0.80); // renascimento da vida
+            break;
     }
+}
+
 }
