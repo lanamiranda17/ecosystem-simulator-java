@@ -80,7 +80,7 @@ public class Simulator {
      * @param numSteps quantidade de passos a simular
      */
     public void simulate(int numSteps) {
-        spawnPlants(0.05);
+        spawnPlants(0.15);
         for (int i = 1; i <= numSteps && view.isViable(field); i++) {
             simulateOneStep();
         }
