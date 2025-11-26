@@ -80,7 +80,6 @@ public class Simulator {
      * @param numSteps quantidade de passos a simular
      */
     public void simulate(int numSteps) {
-        spawnPlants(0.15);
         for (int i = 1; i <= numSteps && view.isViable(field); i++) {
             simulateOneStep();
         }
@@ -130,6 +129,7 @@ public class Simulator {
         field.clear();
         climaAtual = Clima.PRIMAVERA;
         populate();
+        spawnPlants(0.35);
         view.showStatus(step, field);
     }
 
@@ -252,22 +252,22 @@ public class Simulator {
     switch (climaAtual) {
         case PRIMAVERA:
             climaAtual = Clima.VERAO;
-            spawnPlants(0.40); // muitas plantas
+            spawnPlants(0.15); // muitas plantas
             break;
 
         case VERAO:
             climaAtual = Clima.OUTONO;
-            spawnPlants(0.25); 
+            spawnPlants(0.08); 
             break;
 
         case OUTONO:
             climaAtual = Clima.INVERNO;
-            spawnPlants(0.1); // quase nada
+            spawnPlants(0.03); // quase nada
             break;
 
         case INVERNO:
             climaAtual = Clima.PRIMAVERA;
-            spawnPlants(0.80); // renascimento da vida
+            spawnPlants(0.25); // renascimento da vida
             break;
     }
 }
