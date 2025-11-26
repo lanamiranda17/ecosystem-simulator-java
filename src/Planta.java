@@ -2,15 +2,17 @@
  * Representa uma planta no campo,
  * que pode ser consumida por coelhos como fonte de alimento.
  */
-public class Planta {
+public class Planta implements EntidadeSimulavel{
+    private boolean alive;
+    private Location location;
 
-    private boolean alive;   
-    private Field field;      
-    private Location location;  
-
-    public Planta(Field field, Location location) {
+    /**
+     * Cria uma nova planta em uma determinada localização.
+     *
+     * @param location posição inicial da planta no campo
+     */
+    public Planta(Location location) {
         this.alive = true;
-        this.field = field;
         this.location = location;
     }
 
@@ -20,10 +22,10 @@ public class Planta {
 
     public void setDead() {
         alive = false;
-        if (location != null && field != null) {
-            field.clear(location); 
-            location = null;
-            field = null;
-        }
+        location = null;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

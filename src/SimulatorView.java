@@ -24,7 +24,7 @@ public class SimulatorView extends JFrame {
     private JPanel legendPanel;    
     
     private FieldView fieldView;
-    private HashMap<Class, Color> colors;
+    private HashMap<Class<? extends EntidadeSimulavel>, Color> colors;
     private FieldStats stats;
 
     /**
@@ -68,11 +68,11 @@ public class SimulatorView extends JFrame {
         setVisible(true);
     }
 
-    public void setColor(Class<?> cls, Color color) {
+    public void setColor(Class<? extends EntidadeSimulavel> cls, Color color) {
         colors.put(cls, color);
     }
 
-    private Color getColor(Class<?> cls) {
+    private Color getColor(Class<? extends EntidadeSimulavel> cls) {
         return colors.getOrDefault(cls, UNKNOWN_COLOR);
     }
 
@@ -82,7 +82,7 @@ public class SimulatorView extends JFrame {
      * @param cls classe consultada
      * @return cor correspondente
      */
-    public Color getColorFromOutside(Class<?> cls) {
+    public Color getColorFromOutside(Class<? extends EntidadeSimulavel> cls) {
         return getColor(cls);
     }
 
@@ -107,7 +107,7 @@ public class SimulatorView extends JFrame {
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
 
-                Object obj = field.getObjectAt(row, col);
+                EntidadeSimulavel obj = field.getObjectAt(row, col);
 
                 if (obj != null) {
                     stats.incrementCount(obj.getClass());
@@ -151,7 +151,7 @@ public class SimulatorView extends JFrame {
     private void updateLegendPanel(Field field) {
         legendPanel.removeAll();
 
-        for (Class<?> cls : stats.getOrderedClasses()) {
+        for (Class<? extends EntidadeSimulavel> cls : stats.getOrderedClasses()) {
 
             Color col = getColor(cls);
             

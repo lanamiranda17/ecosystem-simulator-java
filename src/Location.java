@@ -18,7 +18,7 @@ public class Location
         this.col = col;
     }
 
-    public boolean equals(Object obj)
+    public boolean equals(EntidadeSimulavel obj)
     {
         if(obj instanceof Location) {
             Location other = (Location) obj;

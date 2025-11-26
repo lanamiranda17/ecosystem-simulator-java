@@ -7,7 +7,7 @@ import java.util.Iterator;
  * Representa o campo em forma de grade onde animais, plantas e obstáculos são posicionados.
  */
 public class Field {
-    private Object[][] field;
+    private EntidadeSimulavel[][] field;
     private int depth;
     private int width;
 
@@ -20,7 +20,7 @@ public class Field {
     public Field(int depth, int width) {
         this.depth = depth;
         this.width = width;
-        field = new Object[depth][width];
+        field = new EntidadeSimulavel[depth][width];
     }
 
     public void clear() {
@@ -35,7 +35,7 @@ public class Field {
         field[location.getRow()][location.getCol()] = null;
     }
 
-    public void place(Object obj, int row, int col) {
+    public void place(EntidadeSimulavel obj, int row, int col) {
         field[row][col] = obj;
     }
 
@@ -45,15 +45,15 @@ public class Field {
      * @param obj objeto a ser colocado
      * @param location posição onde o objeto será inserido
      */
-    public void place(Object obj, Location location) {
+    public void place(EntidadeSimulavel obj, Location location) {
         field[location.getRow()][location.getCol()] = obj;
     }
 
-    public Object getObjectAt(int row, int col) {
+    public EntidadeSimulavel getObjectAt(int row, int col) {
         return field[row][col];
     }
 
-    public Object getObjectAt(Location location) {
+    public EntidadeSimulavel getObjectAt(Location location) {
         return field[location.getRow()][location.getCol()];
     }
 

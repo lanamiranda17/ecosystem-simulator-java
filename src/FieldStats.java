@@ -11,13 +11,13 @@ import java.util.Iterator;
 public class FieldStats {
 
     /** Mapeia cada classe para seu respectivo contador. */
-    private HashMap<Class, Counter> counters;
+    private HashMap<Class<? extends EntidadeSimulavel>, Counter> counters;
 
     /** Indica se as contagens atuais ainda refletem o estado do Field. */
     private boolean countsValid;
 
     public FieldStats() {
-        counters = new HashMap<Class, Counter>();
+        counters = new HashMap<Class<? extends EntidadeSimulavel>, Counter>();
         countsValid = true;
     }
 
@@ -35,7 +35,7 @@ public class FieldStats {
             generateCounts(field);
         }
         
-        Iterator<Class> keys = counters.keySet().iterator();
+        Iterator<Class<? extends EntidadeSimulavel>> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
             Counter info = counters.get(keys.next());
             buffer.append(info.getName());
@@ -52,14 +52,14 @@ public class FieldStats {
      */
     public void reset() {
         countsValid = false;
-        Iterator<Class> keys = counters.keySet().iterator();
+        Iterator<Class<? extends EntidadeSimulavel>> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
             Counter counter = counters.get(keys.next());
             counter.reset();
         }
     }
 
-    public void incrementCount(Class aClass) {
+    public void incrementCount(Class<? extends EntidadeSimulavel> aClass) {
         Counter counter = counters.get(aClass);
         if (counter == null) {
             counter = new Counter(aClass.getName());
@@ -86,7 +86,7 @@ public class FieldStats {
             generateCounts(field);
         }
         
-        Iterator<Class> keys = counters.keySet().iterator();
+        Iterator<Class<? extends EntidadeSimulavel>> keys = counters.keySet().iterator();
         while (keys.hasNext()) {
             Counter info = counters.get(keys.next());
             if (info.getCount() > 0) {
@@ -106,7 +106,7 @@ public class FieldStats {
 
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                Object obj = field.getObjectAt(row, col);
+                EntidadeSimulavel obj = field.getObjectAt(row, col);
                 if (obj != null) {
                     incrementCount(obj.getClass());
                 }
@@ -127,7 +127,7 @@ public class FieldStats {
         if (!countsValid) generateCounts(field);
 
         StringBuilder sb = new StringBuilder();
-        for (Class<?> cls : counters.keySet()) {
+        for (Class<? extends EntidadeSimulavel> cls : counters.keySet()) {
             Counter c = counters.get(cls);
             sb.append(cls.getSimpleName())
               .append(": ")
@@ -143,7 +143,7 @@ public class FieldStats {
      *
      * @return lista contendo todas as classes contadas
      */
-    public java.util.List<Class<?>> getOrderedClasses() {
+    public java.util.List<Class<? extends EntidadeSimulavel>> getOrderedClasses() {
         return new java.util.ArrayList<>(counters.keySet());
     }
 }
