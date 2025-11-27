@@ -21,7 +21,6 @@ public class Simulator {
 
     private static final double FOX_CREATION_PROBABILITY = 0.03;
     private static final double RABBIT_CREATION_PROBABILITY = 0.10;
-    private static final double PLANT_CREATION_PROBABILITY = 0.20;
     private static final double LOBO_CREATION_PROBABILITY = 0.01;
 
     /** Probabilidades usadas quando o mapa.txt não é encontrado. */
@@ -99,7 +98,6 @@ public class Simulator {
             avancarClima();
         }
 
-        spawnPlants();
         List<Animal> newAnimals = new ArrayList<>();
 
         // Executa a ação de cada animal existente
@@ -130,6 +128,7 @@ public class Simulator {
         field.clear();
         climaAtual = Clima.PRIMAVERA;
         populate();
+        spawnPlants(0.35);
         view.showStatus(step, field);
     }
 
@@ -222,21 +221,24 @@ public class Simulator {
     }
 
     /**
-     * Gera novas plantas aleatórias em células vazias a cada passo da simulação.
+     * Gera novas plantas aleatórias em células vazias.
+     * Executado inicialemnte e depois a cada troca de estação.
+     * Cada estação tem sua probabilidade de nascimento de plantas.
      */
-    private void spawnPlants() {
+    private void spawnPlants(double prob) {
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                Location location = new Location(row, col);
-                if (field.getObjectAt(location) == null) {
-                    if (rand.nextDouble() <= PLANT_CREATION_PROBABILITY) {
-                        Planta planta = new Planta(location);
-                        field.place(planta, location);
+                Location loc = new Location(row, col);
+
+                if (field.getObjectAt(loc) == null) {
+                    if (rand.nextDouble() <= prob) {
+                        field.place(new Planta(loc), loc);
                     }
                 }
             }
         }
     }
+
 
     /**
      * Alterna a estação do ano (ciclo de clima) após um determinado número de passos.
@@ -245,15 +247,22 @@ public class Simulator {
         switch (climaAtual) {
             case PRIMAVERA:
                 climaAtual = Clima.VERAO;
+                spawnPlants(0.15); // muitas plantas
                 break;
+
             case VERAO:
                 climaAtual = Clima.OUTONO;
+                spawnPlants(0.08); 
                 break;
+
             case OUTONO:
                 climaAtual = Clima.INVERNO;
+                spawnPlants(0.03); // quase nada
                 break;
+
             case INVERNO:
                 climaAtual = Clima.PRIMAVERA;
+                spawnPlants(0.25); // renascimento da vida
                 break;
         }
     }
@@ -314,4 +323,5 @@ public class Simulator {
         }
         // (A posição do animal agora fica ocupada pelo terreno original ou vazia)
     }
+
 }

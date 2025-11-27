@@ -7,12 +7,13 @@ import java.util.Random;
  * Lobo atua como grande predador, podendo caçar coelhos e raposas.
  */
 public class Lobo extends Animal {
-    private static final int BREEDING_AGE = 15;
+
+    private static final int BREEDING_AGE = 18;
     private static final int MAX_AGE = 200;
-    private static final double BREEDING_PROBABILITY = 0.02;
-    private static final int MAX_LITTER_SIZE = 2;
-    private static final int FOX_FOOD_VALUE = 35;
-    private static final int RABBIT_FOOD_VALUE = 25;
+    private static final double BREEDING_PROBABILITY = 0.01; 
+    private static final int MAX_LITTER_SIZE = 1;
+    private static final int FOX_FOOD_VALUE = 25;    
+    private static final int RABBIT_FOOD_VALUE = 15;  
     private static final Random RAND = new Random();
 
     private int foodLevel;

@@ -9,9 +9,9 @@ import java.util.Random;
 public class Fox extends Animal {
     private static final int BREEDING_AGE = 10;
     private static final int MAX_AGE = 150;
-    private static final double BREEDING_PROBABILITY = 0.06;
-    private static final int MAX_LITTER_SIZE = 3;
-    private static final int RABBIT_FOOD_VALUE = 30;
+    private static final double BREEDING_PROBABILITY = 0.04;
+    private static final int MAX_LITTER_SIZE = 2;
+    private static final int RABBIT_FOOD_VALUE = 20; 
     private static final Random rand = new Random();
 
     private int foodLevel;
