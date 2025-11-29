@@ -121,7 +121,7 @@ public class Simulator {
         field.clear();
         climaAtual = Clima.PRIMAVERA;
         populate();
-        spawnPlants(0.35);
+        spawnPlants(0.35); // Carga inicial de plantas,independente da estação
         view.showStatus(step, field);
     }
 
@@ -232,9 +232,9 @@ public class Simulator {
         }
     }
 
-
     /**
      * Alterna a estação do ano (ciclo de clima) após um determinado número de passos.
+     * Define a probabilidade de cescrimento das plantas para cada estação.
      */
     private void avancarClima() {
         switch (climaAtual) {
@@ -268,10 +268,6 @@ public class Simulator {
         view.showStatus(step, field);
     }
     
-    // Getter para o clima
-    /**
-     * @return O clima atual.
-     */
     public Clima getClimaAtual() {
         return climaAtual;
     }

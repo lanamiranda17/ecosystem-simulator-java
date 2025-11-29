@@ -4,7 +4,6 @@ import java.util.HashMap;
 // Importações necessárias para os botões e timer
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Timer;
 
 
 /**
@@ -14,6 +13,7 @@ import javax.swing.Timer;
  * - Mostrar o passo atual da simulação.
  * - Exibir estatísticas da população.
  * - Renderizar uma legenda visual com as cores de cada classe.
+ * - Controlar a execução via botões (iniciar, pausar, resetar, alterar clima),
  */
 public class SimulatorView extends JFrame implements ActionListener { // Implementa ActionListener
 
@@ -66,10 +66,10 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
 
         // Painel da legenda
         legendPanel = new JPanel();
-        legendPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        legendPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         legendPanel.setBackground(Color.WHITE);
 
-        // --- PAINEL DE CONTROLE (NOVO) ---
+        // --- Painel de controle
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -88,7 +88,7 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
         controlPanel.add(pauseButton);
         controlPanel.add(resetButton);
         controlPanel.add(climaButton);
-        // --- FIM PAINEL DE CONTROLE ---
+        // --- FIM Painel de controle ---
 
 
         // Layout principal
@@ -101,7 +101,9 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
         topPanel.add(climaLabel);
 
         contents.add(topPanel, BorderLayout.NORTH); // Usa o novo topPanel
-        contents.add(fieldView, BorderLayout.CENTER);
+        JPanel centerWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        centerWrapper.add(fieldView);
+        contents.add(centerWrapper, BorderLayout.CENTER);
 
         // Painel inferior: estatísticas + legenda + controles
         JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -152,7 +154,6 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
             simulator.avancarClimaManual();
         }
     }
-
 
     public void setColor(Class<? extends EntidadeSimulavel> cls, Color color) {
         colors.put(cls, color);
@@ -269,7 +270,7 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
      * Renderiza cada célula como um quadrado colorido.
      */
     private class FieldView extends JPanel {
-        private final int GRID_VIEW_SCALING_FACTOR = 6;
+        private final int GRID_VIEW_SCALING_FACTOR = 8;
 
         private int gridWidth, gridHeight;
         private int xScale, yScale;
