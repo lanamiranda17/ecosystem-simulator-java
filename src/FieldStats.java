@@ -12,6 +12,7 @@ public class FieldStats {
 
     /** Mapeia cada classe para seu respectivo contador. */
     private HashMap<Class<? extends EntidadeSimulavel>, Counter> counters;
+    private final HashMap<Class<? extends EntidadeSimulavel>, String> nomePT = new HashMap<>();
 
     /** Indica se as contagens atuais ainda refletem o estado do Field. */
     private boolean countsValid;
@@ -19,6 +20,14 @@ public class FieldStats {
     public FieldStats() {
         counters = new HashMap<Class<? extends EntidadeSimulavel>, Counter>();
         countsValid = true;
+
+        // Labels em português
+        nomePT.put(Fox.class, "Raposa");
+        nomePT.put(Rabbit.class, "Coelho");
+        nomePT.put(Planta.class, "Planta");
+        nomePT.put(Lago.class, "Lago");
+        nomePT.put(Lobo.class, "Lobo");
+        nomePT.put(Montanha.class, "Montanha");
     }
 
     /**
@@ -125,17 +134,22 @@ public class FieldStats {
      */
     public String getPopulationText(Field field) {
         if (!countsValid) generateCounts(field);
-
         StringBuilder sb = new StringBuilder();
+
         for (Class<? extends EntidadeSimulavel> cls : counters.keySet()) {
             Counter c = counters.get(cls);
-            sb.append(cls.getSimpleName())
-              .append(": ")
-              .append(c.getCount())
-              .append("   ");
+
+            // usa nome traduzido
+            String nome = nomePT.getOrDefault(cls, cls.getSimpleName());
+
+            sb.append(nome)
+            .append(": ")
+            .append(c.getCount())
+            .append("   ");
         }
         return sb.toString();
     }
+
 
     /**
      * Retorna a lista de classes atualmente registradas nos contadores.

@@ -32,6 +32,7 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
     
     private FieldView fieldView;
     private HashMap<Class<? extends EntidadeSimulavel>, Color> colors;
+    private final HashMap<Class<? extends EntidadeSimulavel>, String> nomePT = new HashMap<>();
     private FieldStats stats;
     
     // Novos atributos de controle
@@ -55,6 +56,15 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
         this.simulator = sim; // Armazena a referência
         stats = new FieldStats();
         colors = new HashMap<>();
+    
+        // --- Labels em português
+        nomePT.put(Fox.class, "Raposa");
+        nomePT.put(Rabbit.class, "Coelho");
+        nomePT.put(Planta.class, "Planta");
+        nomePT.put(Lago.class, "Lago");
+        nomePT.put(Lobo.class, "Lobo");
+        nomePT.put(Montanha.class, "Montanha");
+
 
         setTitle("Simulação Raposa e Coelho");
 
@@ -251,7 +261,8 @@ public class SimulatorView extends JFrame implements ActionListener { // Impleme
             square.setBackground(col);
             square.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-            JLabel lbl = new JLabel(" " + cls.getSimpleName());
+            String nome = nomePT.getOrDefault(cls, cls.getSimpleName());
+            JLabel lbl = new JLabel(" " + nome);
 
             JPanel item = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
             item.setBackground(Color.WHITE);
