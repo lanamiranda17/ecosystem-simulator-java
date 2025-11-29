@@ -50,7 +50,8 @@ public class Simulator {
         animals = new ArrayList<>();
         field = new Field(depth, width);
         instance = this;  // registra a instância atual para acesso estático
-        view = new SimulatorView(depth, width);
+        // MODIFICACAO: Passa 'this' (a instância do Simulator) para a View
+        view = new SimulatorView(depth, width, this);
 
         // Registra cores para a interface gráfica
         view.setColor(Rabbit.class, Color.ORANGE);
@@ -64,25 +65,17 @@ public class Simulator {
     }
 
     /**
-     * Executa uma simulação longa de 500 passos.
+     * Executa um único passo da simulação, retornando se ainda é viável.
+     * Usado pelo Timer da GUI.
+     * @return true se a simulação ainda for viável, false caso contrário.
      */
-    public void runLongSimulation() {
-        simulate(500);
+    public boolean step() {
+        simulateOneStep();
+        return view.isViable(field);
     }
-
-    /**
-     * Executa a simulação por um número específico de passos.
-     *
-     * A execução para caso o campo deixe de ser viável
-     * (por exemplo, apenas uma espécie restante).
-     *
-     * @param numSteps quantidade de passos a simular
-     */
-    public void simulate(int numSteps) {
-        for (int i = 1; i <= numSteps && view.isViable(field); i++) {
-            simulateOneStep();
-        }
-    }
+    
+    // REMOCAO: Métodos runLongSimulation() e simulate(int numSteps) foram removidos, 
+    // pois o controle de loop agora está no GUI Timer.
 
     /**
      * Executa um único passo da simulação, incluindo:
@@ -135,8 +128,8 @@ public class Simulator {
     /**
      * Preenche o campo inicial usando o arquivo "mapa.txt".
      * O arquivo define posições de:
-     *  - 'L' para lago
-     *  - 'M' para montanha
+     * - 'L' para lago
+     * - 'M' para montanha
      *
      * Se o arquivo não for encontrado, utiliza populateRandomly().
      */
@@ -265,6 +258,22 @@ public class Simulator {
                 spawnPlants(0.25); // renascimento da vida
                 break;
         }
+    }
+    
+    /**
+     * Alterna o clima para a próxima estação. 
+     */
+    public void avancarClimaManual() {
+        avancarClima(); // Reusa a lógica
+        view.showStatus(step, field);
+    }
+    
+    // Getter para o clima
+    /**
+     * @return O clima atual.
+     */
+    public Clima getClimaAtual() {
+        return climaAtual;
     }
 
     /**
