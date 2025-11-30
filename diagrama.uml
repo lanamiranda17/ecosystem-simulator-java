@@ -1,0 +1,254 @@
+@startuml
+
+' ========= Tipos principais =========
+
+interface EntidadeSimulavel
+
+abstract class Animal {
+    - int age
+    - boolean alive
+    - static Random rand
+    - Location location
+    - EntidadeSimulavel terrenoEmbaixo
+
+    + void act(List<Animal> newAnimals)
+    # abstract int getBreedingAge()
+    # abstract int getMaxAge()
+    # abstract boolean podeMover(Location loc)
+    # Field getField()
+    # Location getLocation()
+    # void setLocation(Location newLocation)
+    # EntidadeSimulavel getTerrenoEmbaixo()
+    # void setTerrenoEmbaixo(EntidadeSimulavel obj)
+}
+
+class Rabbit {
+    - static final int BREEDING_AGE
+    - static final int MAX_AGE
+    - static final double BREEDING_PROBABILITY
+    - static final int MAX_LITTER_SIZE
+}
+
+class Fox {
+    - static final int BREEDING_AGE
+    - static final int MAX_AGE
+    - static final double BREEDING_PROBABILITY
+    - static final int MAX_LITTER_SIZE
+    - static final int RABBIT_FOOD_VALUE
+}
+
+class Lobo {
+    - static final int BREEDING_AGE
+    - static final int MAX_AGE
+    - static final double BREEDING_PROBABILITY
+    - static final int MAX_LITTER_SIZE
+    - static final int FOX_FOOD_VALUE
+    - static final int RABBIT_FOOD_VALUE
+}
+
+class Planta {
+    - boolean alive
+    - Location location
+
+    + boolean isAlive()
+    + void setDead()
+    + Location getLocation()
+}
+
+class Lago {
+    ' classe “marcadora” de obstáculo
+}
+
+class Montanha {
+    ' classe “marcadora” de obstáculo
+}
+
+class Location {
+    - int row
+    - int col
+
+    + int getRow()
+    + int getCol()
+}
+
+class Field {
+    - EntidadeSimulavel[][] field
+    - int depth
+    - int width
+
+    + int getDepth()
+    + int getWidth()
+    + void clear()
+    + void clear(Location location)
+    + void place(EntidadeSimulavel obj, Location location)
+    + EntidadeSimulavel getObjectAt(Location location)
+    + List<Location> adjacentLocations(Location location)
+    + List<Location> getFreeAdjacentLocations(Location location)
+    + Location freeAdjacentLocation(Location location)
+    + Location randomLocation()
+}
+
+class Counter {
+    - String name
+    - int count
+
+    + String getName()
+    + int getCount()
+    + void increment()
+    + void reset()
+}
+
+class FieldStats {
+    - HashMap<Class<? extends EntidadeSimulavel>, Counter> counters
+    - HashMap<Class<? extends EntidadeSimulavel>, String> nomePT
+    - boolean countsValid
+
+    + void reset()
+    + void incrementCount(Class<? extends EntidadeSimulavel> cls)
+    + String getPopulationDetails(Field field)
+    + boolean isViable(Field field)
+    + String getPopulationText(Field field)
+    + java.util.List<Class<? extends EntidadeSimulavel>> getOrderedClasses()
+}
+
+enum Clima {
+    PRIMAVERA
+    VERAO
+    OUTONO
+    INVERNO
+}
+
+class Simulator {
+    - static final int DEFAULT_DEPTH
+    - static final int DEFAULT_WIDTH
+    - static final double FOX_CREATION_PROBABILITY
+    - static final double RABBIT_CREATION_PROBABILITY
+    - static final double LOBO_CREATION_PROBABILITY
+    - static final double LAGO_PROBABILITY
+    - static final double MONTANHA_PROBABILITY
+
+    - static Simulator instance
+    - List<Animal> animals
+    - Field field
+    - int step
+    - SimulatorView view
+    - Random rand
+    - static final int PASSOS_POR_ESTACAO
+    - Clima climaAtual
+
+    + Simulator()
+    + boolean step()
+    + void simulate(int numSteps)
+    + void simulateOneStep()
+    + void reset()
+    + void populate()
+    + void populateRandomly()
+    + void spawnPlants(double prob)
+    + void avancarClima()
+    + Clima getClimaAtual()
+    + void avancarClimaManual()
+    + static Field getField()
+    + static void registerMove(Animal animal, Location newLocation)
+    + static void registerDeath(Animal animal)
+}
+
+class SimulatorView {
+    - static final Color EMPTY_COLOR
+    - static final Color UNKNOWN_COLOR
+    - final String STEP_PREFIX
+    - final String CLIMA_PREFIX
+    - final int TIMER_DELAY
+
+    - JLabel stepLabel
+    - JLabel populationLabel
+    - JLabel climaLabel
+    - JPanel legendPanel
+    - FieldView fieldView
+    - HashMap<Class<? extends EntidadeSimulavel>, Color> colors
+    - HashMap<Class<? extends EntidadeSimulavel>, String> nomePT
+    - FieldStats stats
+    - Simulator simulator
+    - Timer timer
+    - JButton startButton
+    - JButton pauseButton
+    - JButton resetButton
+    - JButton climaButton
+
+    + SimulatorView(int height, int width, Simulator sim)
+    + void setColor(Class<? extends EntidadeSimulavel> cls, Color color)
+    + void showStatus(int step, Field field)
+    + boolean isViable(Field field)
+    + void updateLegendPanel(Field field)
+}
+
+class FieldView {
+    - final int GRID_VIEW_SCALING_FACTOR
+    - int gridWidth
+    - int gridHeight
+    - int xScale
+    - int yScale
+    - Dimension size
+    - Graphics g
+    - Image fieldImage
+
+    + Dimension getPreferredSize()
+    + void preparePaint()
+    + void drawMark(int x, int y, Color color)
+    + void paintComponent(Graphics g)
+}
+
+class Principal {
+    + static void main(String[] args)
+}
+
+' ========= Generalização / Realização =========
+
+EntidadeSimulavel <|.. Animal
+EntidadeSimulavel <|.. Planta
+EntidadeSimulavel <|.. Lago
+EntidadeSimulavel <|.. Montanha
+
+Animal <|-- Rabbit
+Animal <|-- Fox
+Animal <|-- Lobo
+
+' ========= Composição / agregação =========
+
+' Field “contém” a grade de entidades simuláveis
+Field "1" *-- "depth x width" EntidadeSimulavel : field
+
+' Animal tem uma Location e o “terreno embaixo”
+Animal "1" --> "1" Location : location
+Animal "1" --> "0..1" EntidadeSimulavel : terrenoEmbaixo
+
+' Planta também está ligada a uma Location
+Planta "1" --> "1" Location : location
+
+' Simulator compõe Field e SimulatorView
+Simulator "1" *-- "1" Field : field
+Simulator "1" *-- "1" SimulatorView : view
+
+' Simulator agrega vários animais
+Simulator "1" o-- "*" Animal : animals
+
+' Simulator mantém estado de clima
+Simulator --> Clima : climaAtual
+
+' FieldStats mantém Counters e “conhece” EntidadeSimulavel
+FieldStats "1" *-- "*" Counter : counters
+FieldStats ..> EntidadeSimulavel : tipos contados
+FieldStats ..> Field : analisa população
+
+' SimulatorView usa FieldStats e conhece o Simulator
+SimulatorView "1" *-- "1" FieldView : fieldView
+SimulatorView "1" o-- "1" FieldStats : stats
+SimulatorView --> Simulator : simulator
+SimulatorView ..> Field : showStatus(Field), isViable(Field)
+
+' FieldView é classe interna de SimulatorView e desenha o Field
+FieldView ..> Field : leitura para renderização
+
+' Programa inicia em Principal
+Principal ..> Simulator : "main cria"
+
+@enduml
